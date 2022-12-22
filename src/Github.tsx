@@ -1,8 +1,33 @@
-import React, { useState } from 'react'
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
 import s from './Github.module.css'
 
+type SearcUserType = {
+  login: string
+  id: number
+}
+
+type SearchResultType = {
+  items: SearcUserType[]
+}
+
 export const Github = () => {
-  const[selectedUser, setSelectedUser]=useState<string | null>(null)
+
+  const [selectedUser, setSelectedUser] = useState<SearcUserType | null>(null)
+const [users, setUsers]=useState<SearcUserType[]>([])
+useEffect(() => {
+  if (selectedUser) {
+    document.title = selectedUser.login
+  }
+}, [selectedUser])
+
+useEffect(() => {
+ axios
+ .get<SearchResultType>('https://api.github.com/search/users?q=it-kamasutra')
+ .then(res=>{
+  setUsers(res.data.items)
+ })
+}, [])
 
   return (
     <div className={s.container}>
@@ -11,12 +36,14 @@ export const Github = () => {
         <button>find</button>
       </div>
       <ul>
-        {['Dima', 'Kseniya'].map((u) => (
-          <li className={ selectedUser === u? s.selected : ''} 
+        {users.
+        map(u => (
+          <li key={u.id}
+          className={ selectedUser === u? s.selected : ''} 
           onClick={()=>{
-            setSelectedUser(u)
-            document.title= u
-          }}>{u}</li>
+            setSelectedUser(u)         
+          }}>{u.login}
+          </li>
         ))}
       </ul>
       <div>
