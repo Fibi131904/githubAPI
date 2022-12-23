@@ -14,7 +14,11 @@ type SearchResultType = {
 export const Github = () => {
 
   const [selectedUser, setSelectedUser] = useState<SearcUserType | null>(null)
-const [users, setUsers]=useState<SearcUserType[]>([])
+  const [users, setUsers]=useState<SearcUserType[]>([])
+  const [tempSearch, setTempSearch]= useState('it-kamasutra')
+  const [searchTerm, setSearchTerm]= useState('it-kamasutra')
+
+ 
 useEffect(() => {
   if (selectedUser) {
     document.title = selectedUser.login
@@ -22,22 +26,25 @@ useEffect(() => {
 }, [selectedUser])
 
 useEffect(() => {
- axios
- .get<SearchResultType>('https://api.github.com/search/users?q=it-kamasutra')
+axios
+ .get<SearchResultType>(`https://api.github.com/search/users?q=${searchTerm}`)
  .then(res=>{
   setUsers(res.data.items)
  })
-}, [])
+}, [searchTerm])
 
   return (
     <div className={s.container}>
       <div>
-        <input placeholder="search" />
-        <button>find</button>
+        <input placeholder="search" 
+        value={tempSearch}
+        onChange={(e)=>{setTempSearch(e.currentTarget.value)}}/>
+        <button onClick={() => {
+          setSearchTerm(tempSearch)
+        }}>find</button>
       </div>
       <ul>
-        {users.
-        map(u => (
+        {users.map(u => (
           <li key={u.id}
           className={ selectedUser === u? s.selected : ''} 
           onClick={()=>{
