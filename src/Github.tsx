@@ -11,9 +11,17 @@ type SearchResultType = {
   items: SearcUserType[]
 }
 
+type UserType={
+  login: string
+  id: number
+  avatar_url: string
+  followers : number
+}
+
 export const Github = () => {
 
   const [selectedUser, setSelectedUser] = useState<SearcUserType | null>(null)
+  const [userDetails, setUserDetails]=useState<null | UserType>(null)
   const [users, setUsers]=useState<SearcUserType[]>([])
   const [tempSearch, setTempSearch]= useState('it-kamasutra')
   const [searchTerm, setSearchTerm]= useState('it-kamasutra')
@@ -32,6 +40,16 @@ axios
   setUsers(res.data.items)
  })
 }, [searchTerm])
+
+useEffect(() => {
+  if(!!selectedUser){
+axios
+ .get<UserType>(`https://api.github.com/users/${selectedUser.login}`)
+ .then(res=>{
+  setUserDetails(res.data)
+ })
+}
+}, [selectedUser])
 
   return (
     <div className={s.container}>
@@ -55,7 +73,11 @@ axios
       </ul>
       <div>
         <h2>UserName</h2>
-        <div>Details</div>
+        {userDetails && <div>
+          <img src={userDetails.avatar_url}/>
+          <br/>
+         { userDetails.login}, Follovers: {userDetails.followers}          
+         </div> }        
       </div>
     </div>
   )
