@@ -12,7 +12,7 @@ export type SearchResultType = {
 }
 
 type UsersListType = {
-  term: string
+  searchTerm: string
   selectedUser: SearcUserType | null
   onUserSelect: (user: SearcUserType) => void
 }
@@ -23,12 +23,12 @@ export const UsersList = (props: UsersListType) => {
   useEffect(() => {
     axios
       .get<SearchResultType>(
-        `https://api.github.com/search/users?q=${props.term}`
+        `https://api.github.com/search/users?q=${props.searchTerm}`
       )
       .then((res) => {
         setUsers(res.data.items)
       })
-  }, [props.term])
+  }, [props.searchTerm])
 
   return (
     <ul>

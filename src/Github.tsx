@@ -32,12 +32,12 @@ export const Github = () => {
           reset
         </button>
         <UsersList
-          term={searchTerm}
+          searchTerm={searchTerm}
           selectedUser={selectedUser}
           onUserSelect={setSelectedUser}
         />
       </div>
-      <Details user={selectedUser} />
+      <Details selectedUser={selectedUser} />
     </div>
   )
 }

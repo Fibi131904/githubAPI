@@ -9,21 +9,21 @@ export type UserType = {
   followers: number
 }
 type DetailsType = {
-  user: SearcUserType | null
+  selectedUser: SearcUserType | null
 }
 
 export const Details = (props: DetailsType) => {
   const [userDetails, setUserDetails] = useState<null | UserType>(null)
 
   useEffect(() => {
-    if (!!props.user) {
+    if (!!props.selectedUser) {
       axios
-        .get<UserType>(`https://api.github.com/users/${props.user.login}`)
+        .get<UserType>(`https://api.github.com/users/${props.selectedUser.login}`)
         .then((res) => {
           setUserDetails(res.data)
         })
     }
-  }, [props.user])
+  }, [props.selectedUser])
 
   return (
     <div>      
