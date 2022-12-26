@@ -3,12 +3,15 @@ import { Details } from './Details'
 import s from './Github.module.css'
 import { Search } from './Search'
 import { SearcUserType, UsersList } from './UsesrList'
+import preloader from './assets/image/preloader2.gif'
 
 export const Github = () => {
   const [searchTerm, setSearchTerm] = useState('Fibi')
   const [selectedUser, setSelectedUser] = useState<SearcUserType | null>(null)
+  const [progress, setProgress] = useState(false);
+ 
 
-  let initialSearchState = 'Fibi'
+  let initialSearchState = 'it'
 
   useEffect(() => {
     if (selectedUser) {
@@ -16,8 +19,11 @@ export const Github = () => {
     }
   }, [selectedUser])
 
+ 
+
   return (
     <div className={s.container}>
+      
       <div>
         <Search
           value={searchTerm}
@@ -35,9 +41,12 @@ export const Github = () => {
           searchTerm={searchTerm}
           selectedUser={selectedUser}
           onUserSelect={setSelectedUser}
+          setProgress={setProgress}
         />
       </div>
-      <Details selectedUser={selectedUser} />
+      <Details selectedUser={selectedUser} 
+      setProgress={setProgress}/>
+      {progress?<img src={preloader}/>: null}
     </div>
   )
 }

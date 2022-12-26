@@ -11,6 +11,8 @@ export type UserType = {
 }
 type DetailsType = {
   selectedUser: SearcUserType | null
+  setProgress:(progress:boolean)=>void
+  
 }
 
 export const Details = (props: DetailsType) => {
@@ -20,11 +22,13 @@ export const Details = (props: DetailsType) => {
 
   useEffect(() => {
     if (!!props.selectedUser) {
+      props.setProgress(true)
       axios
         .get<UserType>(
           `https://api.github.com/users/${props.selectedUser.login}`
         )
         .then((res) => {
+          props.setProgress(false)
           setSeconds(startTimerSeconds)
           setUserDetails(res.data)
         })
